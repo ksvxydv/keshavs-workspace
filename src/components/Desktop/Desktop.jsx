@@ -159,7 +159,11 @@ export default function Desktop() {
                       zIndex: window.zIndex,
                       overflow: "hidden",
                     }}
-                    onMouseDown={() => focusWindow(window.id)}
+                    onMouseDown={() => {
+                      if (window.id !== openWindows[openWindows.length - 1]?.id) {
+                        focusWindow(window.id);
+                      }
+                    }}
                     onClick={(e) => e.stopPropagation()}
                   >
                     <App
@@ -176,7 +180,6 @@ export default function Desktop() {
                       onMaximize={() => maximizeWindow(window.id)}
                       onFocus={() => focusWindow(window.id)}
                       onDragStart={(event) => {
-                        focusWindow(window.id);
                         startDragging(window.id, event);
                       }}
                       onResizeStart={(direction, event) => {

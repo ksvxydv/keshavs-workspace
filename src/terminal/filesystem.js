@@ -14,6 +14,7 @@ export const fileSystem = {
           type: "app",
           app: "finder",
           icon: "finder",
+          technology: "React + Vite",
         },
         {
           id: "terminal",
@@ -21,6 +22,7 @@ export const fileSystem = {
           type: "app",
           app: "terminal",
           icon: "terminal",
+          technology: "React + xterm.js",
         },
         {
           id: "settings",
@@ -28,6 +30,7 @@ export const fileSystem = {
           type: "app",
           app: "settings",
           icon: "settings",
+          technology: "React + Context",
         },
       ],
     },
@@ -42,6 +45,7 @@ export const fileSystem = {
           type: "file",
           file: "resume",
           icon: "pdf",
+          technology: "PDF",
         },
       ],
     },
@@ -56,6 +60,7 @@ export const fileSystem = {
           type: "page",
           page: "about",
           icon: "profile",
+          technology: "React",
         },
         {
           id: "projects-page",
@@ -63,6 +68,7 @@ export const fileSystem = {
           type: "page",
           page: "projects",
           icon: "folder",
+          technology: "React + Framer Motion",
         },
         {
           id: "skills",
@@ -70,6 +76,7 @@ export const fileSystem = {
           type: "page",
           page: "skills",
           icon: "code",
+          technology: "JavaScript",
         },
         {
           id: "education",
@@ -77,6 +84,7 @@ export const fileSystem = {
           type: "page",
           page: "education",
           icon: "graduation",
+          technology: "React",
         },
         {
           id: "achievements",
@@ -84,6 +92,7 @@ export const fileSystem = {
           type: "page",
           page: "achievements",
           icon: "trophy",
+          technology: "React",
         },
         {
           id: "resume-page",
@@ -91,6 +100,7 @@ export const fileSystem = {
           type: "page",
           page: "resume",
           icon: "pdf",
+          technology: "PDF Viewer",
         },
         {
           id: "contact",
@@ -98,6 +108,7 @@ export const fileSystem = {
           type: "page",
           page: "contact",
           icon: "mail",
+          technology: "EmailJS",
         },
       ],
     },
@@ -105,11 +116,13 @@ export const fileSystem = {
       id: "projects",
       name: "Workspace",
       type: "directory",
+      technology: "Development",
       children: [
         {
           id: "kos",
           name: "K-OS",
           type: "directory",
+          technology: "React + Vite",
           children: [
             { id: "kos-readme", name: "README.md", type: "file" },
             { id: "kos-package", name: "package.json", type: "file" },
@@ -144,6 +157,7 @@ export const fileSystem = {
           id: "college",
           name: "College",
           type: "directory",
+          technology: "Documents",
           children: [
             {
               id: "semester-1",
@@ -164,6 +178,7 @@ export const fileSystem = {
           id: "dsa",
           name: "DSA",
           type: "directory",
+          technology: "C++17",
           children: [
             {
               id: "leetcode",
@@ -184,6 +199,7 @@ export const fileSystem = {
           id: "ai-projects",
           name: "AI Projects",
           type: "directory",
+          technology: "OpenAI",
           children: [
             {
               id: "ai-assistant",
@@ -199,6 +215,7 @@ export const fileSystem = {
       id: "downloads",
       name: "Downloads",
       type: "directory",
+      technology: "Directory",
       children: [],
     },
   ],

@@ -49,41 +49,41 @@ export default function WindowFrame({
         width: "100%",
         height: "100%",
       }}
-      className={`relative overflow-hidden border ${
+      className={`relative overflow-hidden border flex h-full flex-col ${
         maximized ? "rounded-none" : "rounded-2xl"
       }`}
     >
       {/* Resize Handles */}
       <div
-        className="absolute inset-x-2 top-0 h-1 cursor-ns-resize"
+        className="absolute inset-x-2 top-0 z-50 h-1 cursor-ns-resize pointer-events-auto"
         onMouseDown={(e) => onResizeStart?.("top", e)}
       />
       <div
-        className="absolute inset-x-2 bottom-0 h-1 cursor-ns-resize"
+        className="absolute inset-x-2 bottom-0 z-50 h-1 cursor-ns-resize pointer-events-auto"
         onMouseDown={(e) => onResizeStart?.("bottom", e)}
       />
       <div
-        className="absolute inset-y-2 left-0 w-1 cursor-ew-resize"
+        className="absolute inset-y-2 left-0 z-50 w-1 cursor-ew-resize pointer-events-auto"
         onMouseDown={(e) => onResizeStart?.("left", e)}
       />
       <div
-        className="absolute inset-y-2 right-0 w-1 cursor-ew-resize"
+        className="absolute inset-y-2 right-0 z-50 w-1 cursor-ew-resize pointer-events-auto"
         onMouseDown={(e) => onResizeStart?.("right", e)}
       />
       <div
-        className="absolute left-0 top-0 h-3 w-3 cursor-nwse-resize"
+        className="absolute left-0 top-0 z-50 h-3 w-3 cursor-nwse-resize pointer-events-auto"
         onMouseDown={(e) => onResizeStart?.("top-left", e)}
       />
       <div
-        className="absolute right-0 top-0 h-3 w-3 cursor-nesw-resize"
+        className="absolute right-0 top-0 z-50 h-3 w-3 cursor-nesw-resize pointer-events-auto"
         onMouseDown={(e) => onResizeStart?.("top-right", e)}
       />
       <div
-        className="absolute left-0 bottom-0 h-3 w-3 cursor-nesw-resize"
+        className="absolute left-0 bottom-0 z-50 h-3 w-3 cursor-nesw-resize pointer-events-auto"
         onMouseDown={(e) => onResizeStart?.("bottom-left", e)}
       />
       <div
-        className="absolute bottom-0 right-0 h-3 w-3 cursor-nwse-resize"
+        className="absolute bottom-0 right-0 z-50 h-3 w-3 cursor-nwse-resize pointer-events-auto"
         onMouseDown={(e) => onResizeStart?.("bottom-right", e)}
       />
       <div
@@ -134,7 +134,7 @@ export default function WindowFrame({
       </div>
 
       <div
-        className="h-[calc(100%-36px)] overflow-auto"
+        className="flex-1 overflow-hidden"
         style={{
           background: "var(--window-secondary)",
           color: "var(--text)",
