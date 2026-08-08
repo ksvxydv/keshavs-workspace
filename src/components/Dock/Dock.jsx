@@ -1,4 +1,11 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { WindowManagerContext } from "../../core/window/WindowManager";
 import { dockApps } from "../../data/dockApps";
 
@@ -8,10 +15,53 @@ export default function Dock() {
     restoreWindow,
     focusWindow,
     openWindows,
+    setDockItemBounds,
   } = useContext(WindowManagerContext);
   const dockRef = useRef(null);
+  const dockItemRefs = useRef(new Map());
   const [mouseX, setMouseX] = useState(null);
   const [bouncingApp, setBouncingApp] = useState(null);
+
+  const registerDockItemRef = useCallback((appId, element) => {
+    if (element) {
+      dockItemRefs.current.set(appId, element);
+      return;
+    }
+
+    dockItemRefs.current.delete(appId);
+  }, []);
+
+  const syncDockItemBounds = useCallback(() => {
+    dockItemRefs.current.forEach((element, appId) => {
+      setDockItemBounds(appId, element.getBoundingClientRect());
+    });
+  }, [setDockItemBounds]);
+
+  useLayoutEffect(() => {
+    syncDockItemBounds();
+  }, [mouseX, syncDockItemBounds]);
+
+  useLayoutEffect(() => {
+    const itemRefs = dockItemRefs.current;
+
+    syncDockItemBounds();
+
+    const resizeObserver = new ResizeObserver(syncDockItemBounds);
+
+    if (dockRef.current) {
+      resizeObserver.observe(dockRef.current);
+    }
+
+    window.addEventListener("resize", syncDockItemBounds);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", syncDockItemBounds);
+      itemRefs.forEach((_element, appId) => {
+        setDockItemBounds(appId, null);
+      });
+    };
+  }, [setDockItemBounds, syncDockItemBounds]);
 
   useEffect(() => {
     if (!bouncingApp) return;
@@ -29,7 +79,7 @@ export default function Dock() {
     const existing = openWindows.find((w) => w.id === app.id);
 
     if (existing) {
-      if (existing.minimized) {
+      if (existing.minimized || existing.minimizing) {
         restoreWindow(app.id);
       }
 
@@ -67,18 +117,14 @@ export default function Dock() {
             boxShadow: "var(--window-shadow), inset 0 1px 0 rgba(255,255,255,.12)",
           }}
         >
-          {dockApps.map((app, index) => {
+          {dockApps.map((app) => {
+            const itemRect = dockItemRefs.current
+              .get(app.id)
+              ?.getBoundingClientRect();
             const distance =
-              mouseX === null
+              mouseX === null || !itemRect
                 ? Infinity
-                : Math.abs(
-                    mouseX -
-                      (dockRef.current?.children[index]?.getBoundingClientRect()
-                        .left +
-                        dockRef.current?.children[index]?.getBoundingClientRect()
-                          .width /
-                          2 || 0),
-                  );
+                : Math.abs(mouseX - (itemRect.left + itemRect.width / 2));
 
             const maxDistance = 170;
 
@@ -98,6 +144,7 @@ export default function Dock() {
             return (
               <button
                 key={app.id}
+                ref={(element) => registerDockItemRef(app.id, element)}
                 title={app.name}
                 onClick={() => handleOpen(app)}
                 className="group relative flex h-14 w-14 items-end justify-center rounded-[18px] transition-colors duration-150 hover:bg-white/8 active:scale-95"

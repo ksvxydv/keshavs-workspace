@@ -1,3 +1,5 @@
+import { workspaceTree } from "../data/workspaceTree";
+
 export const fileSystem = {
   id: "root",
   name: "/",
@@ -117,99 +119,7 @@ export const fileSystem = {
       name: "Workspace",
       type: "directory",
       technology: "Development",
-      children: [
-        {
-          id: "kos",
-          name: "K-OS",
-          type: "directory",
-          technology: "React + Vite",
-          children: [
-            { id: "kos-readme", name: "README.md", type: "file" },
-            { id: "kos-package", name: "package.json", type: "file" },
-            { id: "kos-src", name: "src", type: "directory", children: [] },
-            {
-              id: "kos-public",
-              name: "public",
-              type: "directory",
-              children: [],
-            },
-            {
-              id: "kos-assets",
-              name: "assets",
-              type: "directory",
-              children: [],
-            },
-            {
-              id: "kos-github",
-              name: "GitHub.url",
-              type: "link",
-              url: "https://github.com/ksvxydv/keshavs-workspace",
-            },
-            {
-              id: "kos-demo",
-              name: "Live Demo.url",
-              type: "link",
-              url: "#",
-            },
-          ],
-        },
-        {
-          id: "college",
-          name: "College",
-          type: "directory",
-          technology: "Documents",
-          children: [
-            {
-              id: "semester-1",
-              name: "Semester 1",
-              type: "directory",
-              children: [],
-            },
-            {
-              id: "semester-2",
-              name: "Semester 2",
-              type: "directory",
-              children: [],
-            },
-            { id: "notes", name: "Notes", type: "directory", children: [] },
-          ],
-        },
-        {
-          id: "dsa",
-          name: "DSA",
-          type: "directory",
-          technology: "C++17",
-          children: [
-            {
-              id: "leetcode",
-              name: "LeetCode",
-              type: "directory",
-              children: [],
-            },
-            {
-              id: "codeforces",
-              name: "Codeforces",
-              type: "directory",
-              children: [],
-            },
-            { id: "dsa-notes", name: "Notes.md", type: "file" },
-          ],
-        },
-        {
-          id: "ai-projects",
-          name: "AI Projects",
-          type: "directory",
-          technology: "OpenAI",
-          children: [
-            {
-              id: "ai-assistant",
-              name: "AI Assistant",
-              type: "directory",
-              children: [{ id: "ai-readme", name: "README.md", type: "file" }],
-            },
-          ],
-        },
-      ],
+      children: workspaceTree,
     },
     {
       id: "downloads",

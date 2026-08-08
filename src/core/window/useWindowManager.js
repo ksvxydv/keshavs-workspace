@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const DEFAULT_WIDTH = 1000;
 const DEFAULT_HEIGHT = 650;
@@ -15,6 +15,21 @@ export default function useWindowManager() {
 
   const dragState = useRef(null);
   const resizeState = useRef(null);
+  const dockItemBoundsRef = useRef(new Map());
+
+  const setDockItemBounds = useCallback((appId, bounds) => {
+    if (!bounds) {
+      dockItemBoundsRef.current.delete(appId);
+      return;
+    }
+
+    dockItemBoundsRef.current.set(appId, {
+      left: bounds.left,
+      top: bounds.top,
+      width: bounds.width,
+      height: bounds.height,
+    });
+  }, []);
 
   function openWindow(appId) {
     setTopZIndex((currentTop) => {
@@ -30,6 +45,8 @@ export default function useWindowManager() {
                   ...w,
                   zIndex: nextTop,
                   minimized: false,
+                  minimizing: false,
+                  minimizeAnimation: null,
                   closing: false,
                 }
               : w,
@@ -46,6 +63,8 @@ export default function useWindowManager() {
             height: DEFAULT_HEIGHT,
             zIndex: nextTop,
             minimized: false,
+            minimizing: false,
+            minimizeAnimation: null,
             maximized: false,
             previousBounds: null,
             isAnimating: false,
@@ -71,21 +90,59 @@ export default function useWindowManager() {
           : w,
       ),
     );
-
-    setTimeout(() => {
-      setOpenWindows((current) => current.filter((w) => w.id !== appId));
-
-      setActiveWindowId((current) => (current === appId ? null : current));
-    }, 200);
   }
 
-  function minimizeWindow(appId) {
+  function completeClose(appId) {
+    setOpenWindows((current) => current.filter((w) => w.id !== appId));
+
+    setActiveWindowId((current) => (current === appId ? null : current));
+  }
+
+  function minimizeWindow(appId, sourceBounds) {
+    const targetBounds = dockItemBoundsRef.current.get(appId);
+    const source = sourceBounds && {
+      left: sourceBounds.left,
+      top: sourceBounds.top,
+      width: sourceBounds.width,
+      height: sourceBounds.height,
+    };
+
+    setOpenWindows((current) =>
+      current.map((w) =>
+        w.id !== appId
+          ? w
+          : targetBounds && source
+            ? {
+                ...w,
+                minimizing: true,
+                minimizeAnimation: {
+                  source,
+                  target: targetBounds,
+                },
+              }
+            : {
+                ...w,
+                minimized: true,
+                minimizing: false,
+                minimizeAnimation: null,
+              },
+      ),
+    );
+
+    if (!targetBounds || !source) {
+      setActiveWindowId((current) => (current === appId ? null : current));
+    }
+  }
+
+  function completeMinimize(appId) {
     setOpenWindows((current) =>
       current.map((w) =>
         w.id === appId
           ? {
               ...w,
               minimized: true,
+              minimizing: false,
+              minimizeAnimation: null,
             }
           : w,
       ),
@@ -136,6 +193,8 @@ export default function useWindowManager() {
             ? {
                 ...w,
                 minimized: false,
+                minimizing: false,
+                minimizeAnimation: null,
                 closing: false,
                 isAnimating: false,
                 zIndex: nextTop,
@@ -317,12 +376,15 @@ export default function useWindowManager() {
     isActiveWindowMaximized,
     openWindow,
     closeWindow,
+    completeClose,
     minimizeWindow,
+    completeMinimize,
     maximizeWindow,
     restoreWindow,
     focusWindow,
     startDragging,
     startResizing,
     moveWindow,
+    setDockItemBounds,
   };
 }
