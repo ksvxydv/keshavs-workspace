@@ -21,7 +21,7 @@ export const desktopApps = [
   },
   {
     id: 5,
-    name: "Trash",
-    app: "trash",
+    name: "Music",
+    app: "music",
   },
 ];

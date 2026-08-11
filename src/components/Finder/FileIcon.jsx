@@ -10,15 +10,7 @@ import mailIcon from "../../assets/icons/apps/mail.png";
 import gamesIcon from "../../assets/icons/apps/games.png";
 import missionControlIcon from "../../assets/icons/apps/missionControl.png";
 import { memo } from "react";
-import {
-  Folder,
-  FolderOpen,
-  FileText,
-  AppWindow,
-  Settings,
-  SquareTerminal,
-  Link2,
-} from "lucide-react";
+import { FileText, AppWindow, Link2 } from "lucide-react";
 
 const IconImage = ({ src, alt, size }) => (
   <img

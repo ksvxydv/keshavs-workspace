@@ -6,8 +6,9 @@ import {
   useRef,
   useState,
 } from "react";
-import { WindowManagerContext } from "../../core/window/WindowManager";
+import { WindowManagerContext } from "../../core/window/WindowManagerContext";
 import { dockApps } from "../../data/dockApps";
+import { useDesktopSettings } from "../../context/useDesktopSettings";
 
 export default function Dock() {
   const {
@@ -17,6 +18,7 @@ export default function Dock() {
     openWindows,
     setDockItemBounds,
   } = useContext(WindowManagerContext);
+  const { dockSize, dockMagnification } = useDesktopSettings();
   const dockRef = useRef(null);
   const dockItemRefs = useRef(new Map());
   const [mouseX, setMouseX] = useState(null);
@@ -130,7 +132,7 @@ export default function Dock() {
 
             let scale = 1;
 
-            if (mouseX !== null) {
+            if (dockMagnification && mouseX !== null) {
               const t = Math.max(0, 1 - distance / maxDistance);
 
               // Smooth macOS-style easing
@@ -147,8 +149,10 @@ export default function Dock() {
                 ref={(element) => registerDockItemRef(app.id, element)}
                 title={app.name}
                 onClick={() => handleOpen(app)}
-                className="group relative flex h-14 w-14 items-end justify-center rounded-[18px] transition-colors duration-150 hover:bg-white/8 active:scale-95"
+                className="group relative flex items-end justify-center rounded-[18px] transition-colors duration-150 hover:bg-white/8 active:scale-95"
                 style={{
+                  height: `${dockSize}px`,
+                  width: `${dockSize}px`,
                   background: "transparent",
                   transform: `scale(${scale})`,
                   transformOrigin: "bottom center",
@@ -164,7 +168,11 @@ export default function Dock() {
                   src={app.icon}
                   alt={app.name}
                   draggable={false}
-                  className="h-12 w-12 object-contain select-none pointer-events-none drop-shadow-md"
+                  className="object-contain select-none pointer-events-none drop-shadow-md"
+                  style={{
+                    height: `${dockSize - 8}px`,
+                    width: `${dockSize - 8}px`,
+                  }}
                 />
 
                 <span

@@ -7,31 +7,39 @@ import MenuBar from "../MenuBar/MenuBar";
 import Dock from "../Dock/Dock";
 import BrightnessOverlay from "../../core/system/BrightnessOverlay";
 
-import { useDesktopSettings } from "../../context/DesktopSettingsContext";
+import { useDesktopSettings } from "../../context/useDesktopSettings";
 import { motion } from "framer-motion";
 import { registerTerminalActions } from "../../terminal/terminalActions";
 
-function getWindowAnimation(window) {
+function getWindowAnimation(window, isMC, mcProps) {
   if (window.closing) {
     return { opacity: 0, scale: 0.96 };
   }
 
-  if (window.minimizing && window.minimizeAnimation) {
-    const { source, target } = window.minimizeAnimation;
-    const scale = Math.min(
-      target.width / source.width,
-      target.height / source.height,
-    );
-
+  if (isMC) {
     return {
-      opacity: 0,
-      scale,
-      x: target.left - source.left + (target.width - source.width * scale) / 2,
-      y: target.top - source.top + (target.height - source.height * scale) / 2,
+      opacity: 1,
+      scale: mcProps.scale,
+      x: mcProps.x,
+      y: mcProps.y,
     };
   }
 
-  return { opacity: 1, scale: 1, x: 0, y: 0 };
+  if ((window.minimizing || window.minimized) && window.minimizeAnimation) {
+    return {
+      opacity: 0,
+      scaleX: 0.1,
+      scaleY: 0.05,
+      x: 0,
+      y: 0,
+    };
+  }
+
+  if (window.minimized) {
+    return { opacity: 0, scale: 0.8 };
+  }
+
+  return { opacity: 1, scaleX: 1, scaleY: 1, x: 0, y: 0 };
 }
 
 export default function Desktop() {
@@ -42,6 +50,7 @@ export default function Desktop() {
     setWallpaper,
     setTheme,
     setAccentColor,
+    showDesktopIcons,
   } = useDesktopSettings();
 
   const openWindowRef = useRef(null);
@@ -80,6 +89,8 @@ export default function Desktop() {
         focusWindow,
         startDragging,
         startResizing,
+        isMissionControlActive,
+        setIsMissionControlActive,
       }) => {
         openWindowRef.current = openWindow;
 
@@ -119,16 +130,64 @@ export default function Desktop() {
 
             {/* Menu Bar */}
             <MenuBar />
-            <DesktopIconGrid apps={desktopApps} onOpen={openWindow} />
+            {showDesktopIcons && (
+              <DesktopIconGrid apps={desktopApps} onOpen={openWindow} />
+            )}
+
+            {/* Mission Control Overlay */}
+            <motion.div
+              initial={false}
+              animate={{ opacity: isMissionControlActive ? 1 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="absolute inset-0 z-40 pointer-events-none"
+              style={{
+                background: "rgba(0,0,0,0.4)",
+                backdropFilter: isMissionControlActive ? "blur(12px)" : "none",
+                WebkitBackdropFilter: isMissionControlActive ? "blur(12px)" : "none",
+              }}
+            />
 
             {/* Windows */}
-            {openWindows.map((window) => {
+            {openWindows.map((window, idx) => {
               const App = appRegistry[window.id]?.component;
 
               if (!App) return null;
-              if (window.minimized) {
-                console.log("Window is minimized:", window.id, window);
-                return null;
+
+
+              let mcProps = {};
+              if (isMissionControlActive) {
+                const visibleWindows = openWindows.filter(w => !w.minimized);
+                const cols = Math.max(1, Math.ceil(Math.sqrt(visibleWindows.length)));
+                const activeIdx = visibleWindows.findIndex(w => w.id === window.id);
+                
+                const row = Math.floor(activeIdx / cols);
+                const col = activeIdx % cols;
+                
+                const padding = 80;
+                const availableW = window.innerWidth - padding * 2;
+                const availableH = window.innerHeight - padding * 2;
+                
+                const cellW = availableW / cols;
+                const cellH = availableH / Math.max(1, Math.ceil(visibleWindows.length / cols));
+                
+                const scale = Math.min((cellW - 40) / window.width, (cellH - 40) / window.height, 0.65);
+                
+                const targetX = padding + col * cellW + (cellW - window.width * scale) / 2;
+                const targetY = padding + row * cellH + (cellH - window.height * scale) / 2;
+                
+                mcProps = {
+                  x: targetX - (window.maximized ? 0 : window.x),
+                  y: targetY - (window.maximized ? 0 : window.y),
+                  scale: scale,
+                };
+              }
+
+              let transformOrigin = "center";
+              if ((window.minimizing || window.minimized) && window.minimizeAnimation) {
+                const { source, target } = window.minimizeAnimation;
+                const originX = (target.left + target.width / 2) - source.left;
+                const originY = (target.top + target.height / 2) - source.top;
+                transformOrigin = `${originX}px ${originY}px`;
               }
 
               return (
@@ -143,8 +202,11 @@ export default function Desktop() {
                     windowElementsRef.current.delete(window.id);
                   }}
                   initial={false}
-                  animate={getWindowAnimation(window)}
-                  transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                  animate={getWindowAnimation(window, isMissionControlActive, mcProps)}
+                  transition={{ 
+                    duration: (window.minimizing || window.minimized) ? 0.45 : 0.28, 
+                    ease: (window.minimizing || window.minimized) ? "anticipate" : [0.22, 1, 0.36, 1] 
+                  }}
                   onAnimationComplete={() => {
                     if (window.closing) {
                       completeClose(window.id);
@@ -160,13 +222,20 @@ export default function Desktop() {
                     top: window.maximized ? 0 : window.y,
                     width: window.maximized ? "100vw" : window.width,
                     height: window.maximized ? "100vh" : window.height,
-                    zIndex: window.zIndex,
+                    zIndex: isMissionControlActive ? 50 + idx : window.zIndex,
                     overflow: "hidden",
                     pointerEvents:
-                      window.closing || window.minimizing ? "none" : "auto",
-                    transformOrigin: window.minimizing ? "top left" : "center",
+                      window.closing || window.minimizing || window.minimized ? "none" : "auto",
+                    transformOrigin,
+                    cursor: isMissionControlActive ? "pointer" : "auto",
+                    boxShadow: isMissionControlActive ? "0 20px 50px rgba(0,0,0,0.5)" : "none",
                   }}
                   onMouseDown={() => {
+                    if (isMissionControlActive) {
+                      setIsMissionControlActive(false);
+                      focusWindow(window.id);
+                      return;
+                    }
                     if (window.id !== openWindows[openWindows.length - 1]?.id) {
                       focusWindow(window.id);
                     }

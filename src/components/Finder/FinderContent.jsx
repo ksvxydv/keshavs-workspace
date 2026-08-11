@@ -10,12 +10,6 @@ export default function FinderContent({
   items,
   openDirectory,
   openItem,
-  openPath,
-  goHome,
-  goBack,
-  goForward,
-  canGoBack,
-  canGoForward,
   viewMode = "grid",
 }) {
   const [gridItems, setGridItems] = useState(items);
@@ -37,10 +31,7 @@ export default function FinderContent({
     setGridItems(items);
   }, [items]);
 
-  const {
-    selectedItem,
-    setSelectedItem,
-  } = useFinderSelection({
+  const { selectedItem, setSelectedItem } = useFinderSelection({
     items: gridItems,
     itemRefs,
   });
@@ -48,7 +39,13 @@ export default function FinderContent({
   useEffect(() => {
     const handleClickOutside = () => {
       if (contextMenu.visible) {
-        setContextMenu({ visible: false, x: 0, y: 0, item: null, anchorRect: null });
+        setContextMenu({
+          visible: false,
+          x: 0,
+          y: 0,
+          item: null,
+          anchorRect: null,
+        });
       }
     };
     window.addEventListener("click", handleClickOutside);
@@ -126,7 +123,7 @@ export default function FinderContent({
   return (
     <main
       ref={mainRef}
-      className="flex-1 overflow-auto px-8 pb-6 pt-4"
+      className="h-full overflow-auto px-6 pb-6 pt-4"
       style={{
         background: "var(--window-secondary)",
         color: "var(--text)",
@@ -145,61 +142,62 @@ export default function FinderContent({
               No items match your search.
             </p>
           </div>
+        ) : viewMode === "grid" ? (
+          <div className="grid grid-cols-2 gap-x-8 gap-y-10 justify-items-center sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+            {gridItems.map((item, index) => (
+              <FinderGridItem
+                key={item.id}
+                item={item}
+                index={index}
+                selected={selectedItem === item.id}
+                onSelect={setSelectedItem}
+                onOpen={openFinderItem}
+                openItem={openItem}
+                openDirectory={openDirectory}
+                registerItemRef={registerItemRef}
+                onDragStart={handleDragStart}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                onContextMenu={handleContextMenu}
+              />
+            ))}
+          </div>
         ) : (
-          viewMode === "grid" ? (
-            <div className="grid grid-cols-2 gap-x-8 gap-y-10 justify-items-center sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
-              {gridItems.map((item, index) => (
-                <FinderGridItem
-                  key={item.id}
-                  item={item}
-                  index={index}
-                  selected={selectedItem === item.id}
-                  onSelect={setSelectedItem}
-                  onOpen={openFinderItem}
-                  openItem={openItem}
-                  openDirectory={openDirectory}
-                  registerItemRef={registerItemRef}
-                  onDragStart={handleDragStart}
-                  onDragOver={handleDragOver}
-                  onDrop={handleDrop}
-                  onContextMenu={handleContextMenu}
-                />
-              ))}
-            </div>
-          ) : (
+          <div
+            className="overflow-hidden rounded-2xl border"
+            style={{
+              borderColor: "var(--border)",
+              background: "color-mix(in srgb, var(--window) 72%, transparent)",
+              backdropFilter: "blur(24px)",
+              WebkitBackdropFilter: "blur(24px)",
+            }}
+          >
             <div
-              className="overflow-hidden rounded-2xl border"
-              style={{
-                borderColor: "color-mix(in srgb, var(--border) 70%, transparent)",
-                background: "color-mix(in srgb, var(--window) 72%, transparent)",
-                backdropFilter: "blur(24px)",
-                WebkitBackdropFilter: "blur(24px)",
-              }}
+              className="grid grid-cols-[1fr_120px_130px] px-4 py-3 text-xs font-semibold uppercase"
+              style={{ color: "var(--text-muted)" }}
             >
-              <div className="grid grid-cols-[1fr_120px_130px] px-4 py-3 text-xs font-semibold uppercase opacity-60">
-                <span>Name</span>
-                <span>Kind</span>
-                <span className="text-right">Technology</span>
-              </div>
-              {gridItems.map((item, index) => (
-                <FinderListItem
-                  key={item.id}
-                  item={item}
-                  index={index}
-                  selected={selectedItem === item.id}
-                  onSelect={setSelectedItem}
-                  onOpen={openFinderItem}
-                  openItem={openItem}
-                  openDirectory={openDirectory}
-                  registerItemRef={registerItemRef}
-                  onDragStart={handleDragStart}
-                  onDragOver={handleDragOver}
-                  onDrop={handleDrop}
-                  onContextMenu={handleContextMenu}
-                />
-              ))}
+              <span>Name</span>
+              <span>Kind</span>
+              <span className="text-right">Technology</span>
             </div>
-          )
+            {gridItems.map((item, index) => (
+              <FinderListItem
+                key={item.id}
+                item={item}
+                index={index}
+                selected={selectedItem === item.id}
+                onSelect={setSelectedItem}
+                onOpen={openFinderItem}
+                openItem={openItem}
+                openDirectory={openDirectory}
+                registerItemRef={registerItemRef}
+                onDragStart={handleDragStart}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                onContextMenu={handleContextMenu}
+              />
+            ))}
+          </div>
         )}
       </div>
       <FinderContextMenu

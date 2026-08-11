@@ -1,8 +1,6 @@
-
-import { createContext, useContext, useEffect } from "react";
-import { useDesktopSettings } from "../context/DesktopSettingsContext";
-
-const ThemeContext = createContext(null);
+import { useEffect } from "react";
+import { useDesktopSettings } from "../context/useDesktopSettings";
+import { ThemeContext } from "./ThemeContext";
 
 export function ThemeProvider({ children }) {
   const { theme, setTheme } = useDesktopSettings();
@@ -19,17 +17,8 @@ export function ThemeProvider({ children }) {
   }, [theme]);
 
   return (
-    <ThemeContext.Provider
-      value={{
-        themeName: theme,
-        setTheme,
-      }}
-    >
+    <ThemeContext.Provider value={{ themeName: theme, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );
-}
-
-export function useTheme() {
-  return useContext(ThemeContext);
 }

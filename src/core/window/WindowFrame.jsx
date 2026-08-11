@@ -95,33 +95,78 @@ export default function WindowFrame({
           borderColor: "var(--border)",
         }}
       >
-        <div className="group ml-3 flex items-center gap-[7px]">
+        <div className="group flex items-center gap-2">
           <button
             onMouseDown={(e) => e.stopPropagation()}
             onClick={onClose}
-            className="relative flex h-3 w-3 items-center justify-center rounded-full bg-red-500 transition hover:brightness-110"
+            className="relative flex h-3.5 w-3.5 items-center justify-center rounded-full"
+            style={{
+              backgroundColor: "#ff5f57",
+              boxShadow: "inset 0 0 0 0.5px rgba(0,0,0,0.15)",
+            }}
           >
-            <span className="pointer-events-none text-[8px] font-bold leading-none text-black opacity-0 transition-opacity duration-150 group-hover:opacity-100 select-none">
-              ×
-            </span>
+            <svg
+              viewBox="0 0 6 6"
+              width="8"
+              height="8"
+              className="opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+            >
+              <path
+                d="M1.2 1.2 L4.8 4.8 M4.8 1.2 L1.2 4.8"
+                stroke="#4c0002"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+              />
+            </svg>
           </button>
           <button
             onMouseDown={(e) => e.stopPropagation()}
             onClick={onMinimize}
-            className="relative flex h-3 w-3 items-center justify-center rounded-full bg-yellow-500 transition hover:brightness-110"
+            className="relative flex h-3.5 w-3.5 items-center justify-center rounded-full"
+            style={{
+              backgroundColor: "#febc2e",
+              boxShadow: "inset 0 0 0 0.5px rgba(0,0,0,0.15)",
+            }}
           >
-            <span className="pointer-events-none text-[8px] font-bold leading-none text-black opacity-0 transition-opacity duration-150 group-hover:opacity-100 select-none">
-              −
-            </span>
+            <svg
+              viewBox="0 0 6 6"
+              width="8"
+              height="8"
+              className="opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+            >
+              <line
+                x1="1.2"
+                y1="3"
+                x2="4.8"
+                y2="3"
+                stroke="#5a3000"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+              />
+            </svg>
           </button>
           <button
             onMouseDown={(e) => e.stopPropagation()}
             onClick={onMaximize}
-            className="relative flex h-3 w-3 items-center justify-center rounded-full bg-green-500 transition hover:brightness-110"
+            className="relative flex h-3.5 w-3.5 items-center justify-center rounded-full"
+            style={{
+              backgroundColor: "#28c840",
+              boxShadow: "inset 0 0 0 0.5px rgba(0,0,0,0.15)",
+            }}
           >
-            <span className="pointer-events-none text-[8px] font-bold leading-none text-black opacity-0 transition-opacity duration-150 group-hover:opacity-100 select-none">
-              ↗
-            </span>
+            <svg
+              viewBox="0 0 6 6"
+              width="8"
+              height="8"
+              className="opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+            >
+              <path
+                d="M1 1H4L2.833 2.166L4.333 3.666L3.666 4.333L2.166 2.833L1 4V1ZM5 5H2L3.166 3.833L1.666 2.333L2.333 1.666L3.833 3.166L5 2V5Z"
+                fill="#004d09"
+                stroke="#004d09"
+                strokeWidth="0.2"
+              />
+            </svg>
           </button>
         </div>
         <div className="w-20" />
@@ -133,13 +178,7 @@ export default function WindowFrame({
         </h2>
       </div>
 
-      <div
-        className="flex-1 overflow-hidden"
-        style={{
-          background: "var(--window-secondary)",
-          color: "var(--text)",
-        }}
-      >
+      <div className="flex-1 overflow-hidden">
         {children}
       </div>
     </motion.div>

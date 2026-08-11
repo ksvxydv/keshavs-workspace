@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useDesktopSettings } from "../../context/DesktopSettingsContext";
+import { useDesktopSettings } from "../../context/useDesktopSettings";
 import WindowFrame from "../../core/window/WindowFrame";
 import { parseCommand } from "../../terminal/parser";
 import { commands } from "../../terminal/command";
@@ -129,11 +129,11 @@ export default function Terminal(props) {
   return (
     <WindowFrame title="Terminal" {...props}>
       <div
-        className={`flex h-full flex-col p-4 font-mono text-sm ${
-          theme === "dark"
-            ? "bg-black text-green-400"
-            : "bg-neutral-100 text-black"
-        }`}
+        className="flex h-full flex-col p-4 font-mono text-sm"
+        style={{
+          background: theme === "dark" ? "#0d0d0d" : "var(--window-secondary)",
+          color: theme === "dark" ? "#4ade80" : "var(--text)",
+        }}
       >
         <TerminalOutput history={history} />
 

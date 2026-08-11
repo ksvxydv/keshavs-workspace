@@ -33,7 +33,10 @@ export default function DesktopContextMenu({
             <button
               key={action.id}
               type="button"
-              className="flex w-full items-center px-3 py-2 text-left text-sm transition-colors hover:bg-white/10"
+              className="flex w-full items-center px-3 py-2 text-left text-sm transition-colors"
+              style={{ color: "var(--text)" }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--hover)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
               onClick={action.onSelect}
             >
               {action.label}

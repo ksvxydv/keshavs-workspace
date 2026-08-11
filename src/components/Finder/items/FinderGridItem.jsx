@@ -51,7 +51,6 @@ export default function FinderGridItem({
           ? "color-mix(in srgb, var(--accent) 16%, transparent)"
           : "transparent",
         color: "var(--text)",
-        borderRadius: "14px",
         border: selected
           ? "1px solid color-mix(in srgb, var(--accent) 60%, transparent)"
           : "1px solid transparent",

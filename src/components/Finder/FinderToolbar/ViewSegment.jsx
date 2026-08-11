@@ -25,7 +25,7 @@ export default function ViewSegment({ viewMode, onViewModeChange }) {
 
   return (
     <div
-      className="inline-flex h-9 items-center overflow-hidden rounded-2xl border p-1"
+      className="inline-flex items-center overflow-hidden rounded-[14px] border p-[3px]"
       style={{
         background: 'color-mix(in srgb, var(--window) 60%, transparent)',
         borderColor: 'color-mix(in srgb, var(--border) 45%, transparent)',
@@ -54,6 +54,7 @@ export default function ViewSegment({ viewMode, onViewModeChange }) {
         />
         <ToolbarButton
           ref={gridRef}
+          size="sm"
           className="relative overflow-hidden z-10 mx-0.5"
           active={viewMode === 'grid'}
           onClick={() => onViewModeChange?.('grid')}
@@ -66,6 +67,7 @@ export default function ViewSegment({ viewMode, onViewModeChange }) {
         </ToolbarButton>
         <ToolbarButton
           ref={listRef}
+          size="sm"
           className="relative overflow-hidden z-10 mx-0.5"
           active={viewMode === 'list'}
           onClick={() => onViewModeChange?.('list')}

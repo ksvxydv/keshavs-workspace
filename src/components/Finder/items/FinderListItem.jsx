@@ -18,17 +18,9 @@ export default function FinderListItem({
   return (
     <button
       ref={(el) => registerItemRef(item.id, el)}
-      className="group flex items-center gap-4 rounded-xl px-4 py-3 w-full transition-all duration-200"
-      style={{
-        border: "1px solid transparent",
-        borderRadius: 12,
-        color: "var(--text)",
-        backgroundColor: selected
-          ? "color-mix(in srgb, var(--accent) 10%, transparent)"
-          : "transparent",
-        boxShadow: selected ? `0 0 0 1px var(--accent)` : "none",
-      }}
+      type="button"
       draggable
+      tabIndex={0}
       onDragStart={(e) => onDragStart(e, index)}
       onDragOver={onDragOver}
       onDrop={(e) => onDrop(e, index)}
@@ -38,15 +30,44 @@ export default function FinderListItem({
         onSelect(item.id);
       }}
       onContextMenu={(e) => onContextMenu(e, item)}
-      tabIndex={0}
-      type="button"
+      className="group flex w-full items-center gap-4 rounded-xl px-4 py-3 transition-all duration-200"
+      style={{
+        border: "1px solid transparent",
+        borderRadius: 12,
+        color: "var(--text)",
+        backgroundColor: selected
+          ? "color-mix(in srgb, var(--accent) 10%, transparent)"
+          : "transparent",
+        boxShadow: selected
+          ? "0 0 0 1px color-mix(in srgb, var(--accent) 60%, transparent)"
+          : "none",
+      }}
+      onMouseEnter={(e) => {
+        if (!selected) e.currentTarget.style.backgroundColor = "var(--hover)";
+      }}
+      onMouseLeave={(e) => {
+        if (!selected) e.currentTarget.style.backgroundColor = "transparent";
+      }}
     >
-      <FileIcon item={item} size={48} />
-      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
-        <span className="text-sm font-semibold truncate">{item.displayName ?? item.name}</span>
+      <FileIcon item={item} size={40} />
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+        <span
+          className="truncate text-sm font-semibold"
+          style={{ color: "var(--text)" }}
+        >
+          {item.displayName ?? item.name}
+        </span>
       </div>
-      <div className="w-32 text-xs text-neutral-500 dark:text-neutral-400 truncate">{item.type}</div>
-      <div className="w-32 text-xs text-right text-neutral-400 dark:text-neutral-500 truncate">
+      <div
+        className="w-32 truncate text-xs"
+        style={{ color: "var(--text-secondary)" }}
+      >
+        {item.type}
+      </div>
+      <div
+        className="w-32 truncate text-right text-xs"
+        style={{ color: "var(--text-muted)" }}
+      >
         {item.technology ?? item.tech ?? item.stack ?? "—"}
       </div>
     </button>

@@ -12,7 +12,7 @@ export default function NavigationSegment({
 }) {
   return (
     <div
-      className="inline-flex items-center overflow-hidden rounded-2xl border p-1"
+      className="inline-flex items-center overflow-hidden rounded-[14px] border p-[3px]"
       style={{
         background: 'color-mix(in srgb, var(--window) 60%, transparent)',
         borderColor: 'color-mix(in srgb, var(--border) 45%, transparent)',
@@ -25,6 +25,7 @@ export default function NavigationSegment({
       <div className="flex items-center divide-x divide-white/10 dark:divide-white/5">
         <ToolbarButton
           onClick={goBack}
+          size="sm"
           disabled={!canGoBack}
           aria-label="Go back"
           className="mx-0.5"
@@ -33,6 +34,7 @@ export default function NavigationSegment({
         </ToolbarButton>
         <ToolbarButton
           onClick={goForward}
+          size="sm"
           disabled={!canGoForward}
           aria-label="Go forward"
           className="mx-0.5"
@@ -40,7 +42,7 @@ export default function NavigationSegment({
           <FaChevronRight />
         </ToolbarButton>
         {!compact && (
-          <ToolbarButton onClick={goHome} aria-label="Go home" className="mx-0.5">
+          <ToolbarButton onClick={goHome} size="sm" aria-label="Go home" className="mx-0.5">
             <FaHome />
           </ToolbarButton>
         )}

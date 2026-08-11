@@ -93,13 +93,6 @@ export default function Finder({
               items={displayItems}
               openDirectory={openDirectory}
               openItem={openItem}
-              goHome={goHome}
-              goBack={goBack}
-              goForward={goForward}
-              canGoBack={canGoBack}
-              canGoForward={canGoForward}
-              openPath={openPath}
-              itemLabel={(item) => item.displayName ?? item.name}
               viewMode={viewMode}
             />
           </div>

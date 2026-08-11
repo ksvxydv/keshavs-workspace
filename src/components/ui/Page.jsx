@@ -9,7 +9,7 @@ export default function Page({ children, className = "", style = {} }) {
       }}
     >
       <div
-        className="h-full w-full overflow-hidden rounded-[30px] border"
+        className="h-full w-full overflow-hidden rounded-2xl border"
         style={{
           borderColor: "color-mix(in srgb, var(--border) 85%, transparent)",
           background: "color-mix(in srgb, var(--window) 96%, transparent)",

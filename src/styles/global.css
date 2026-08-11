@@ -133,3 +133,12 @@ html {
   border: 2px solid var(--window-secondary);
   cursor: pointer;
 }
+
+/* GitHub logo: invert to white in dark mode (the SVG is black by default) */
+.github-logo {
+  transition: filter 0.3s ease;
+}
+
+[data-theme="dark"] .github-logo {
+  filter: invert(1);
+}

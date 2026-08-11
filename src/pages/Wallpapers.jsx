@@ -1,4 +1,4 @@
-import { useDesktopSettings } from "../context/DesktopSettingsContext";
+import { useDesktopSettings } from "../context/useDesktopSettings";
 import { wallpapers } from "../data/wallpapers";
 
 export default function Wallpapers() {

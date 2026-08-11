@@ -1,5 +1,3 @@
-import { workspaceTree } from "../data/workspaceTree";
-
 export const fileSystem = {
   id: "root",
   name: "/",
@@ -113,13 +111,6 @@ export const fileSystem = {
           technology: "EmailJS",
         },
       ],
-    },
-    {
-      id: "projects",
-      name: "Workspace",
-      type: "directory",
-      technology: "Development",
-      children: workspaceTree,
     },
     {
       id: "downloads",

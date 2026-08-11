@@ -38,7 +38,7 @@ export default function MenuLeft({ activeApp = "finder" }) {
   const items = menus[activeApp] ?? menus.finder;
 
   return (
-    <div className="flex items-center gap-5">
+    <div className="flex items-center gap-5" style={{ color: "var(--text)" }}>
       <button
         type="button"
         className="text-lg font-semibold transition-opacity hover:opacity-70"
@@ -50,9 +50,11 @@ export default function MenuLeft({ activeApp = "finder" }) {
         <button
           key={item}
           type="button"
-          className={`text-sm transition-opacity hover:opacity-70 ${
+          className={`rounded-md px-2 py-0.5 text-sm transition-all duration-150 hover:opacity-80 ${
             index === 0 ? "font-semibold" : "font-medium"
           }`}
+          onMouseEnter={(e) => (e.currentTarget.style.background = "var(--hover)")}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
         >
           {item}
         </button>

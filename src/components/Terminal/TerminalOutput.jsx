@@ -1,7 +1,5 @@
-
-
 import { useEffect, useRef } from "react";
-import { useDesktopSettings } from "../../context/DesktopSettingsContext";
+import { useDesktopSettings } from "../../context/useDesktopSettings";
 
 export default function TerminalOutput({ history }) {
   const outputRef = useRef(null);

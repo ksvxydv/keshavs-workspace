@@ -1,7 +1,7 @@
 import { FaWifi, FaBluetoothB, FaMoon, FaBroadcastTower } from "react-icons/fa";
 
 import useSystem from "../../core/system/useSystem";
-import { useDesktopSettings } from "../../context/DesktopSettingsContext";
+import { useDesktopSettings } from "../../context/useDesktopSettings";
 
 import ToggleButton from "./ToggleButton";
 import BrightnessSlider from "./BrightnessSlider";

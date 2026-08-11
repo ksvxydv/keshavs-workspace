@@ -22,8 +22,8 @@ export const dockApps = [
     icon: icons.settings,
   },
   {
-    id: "trash",
-    name: "Trash",
-    icon: icons.trash,
+    id: "music",
+    name: "Music",
+    icon: icons.music,
   },
 ];

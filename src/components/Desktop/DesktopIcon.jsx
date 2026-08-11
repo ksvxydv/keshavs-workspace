@@ -21,7 +21,7 @@ export default function DesktopIcon({ name, onOpen, selected, onSelect }) {
 
       <span
         className={`rounded-md px-2 py-0.5 text-sm transition-colors ${
-          selected ? "bg-[#0A84FF] text-white" : "text-white drop-shadow"
+          selected ? "bg-[color:var(--accent)] text-white" : "text-white drop-shadow"
         }`}
       >
         {name}

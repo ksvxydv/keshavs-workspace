@@ -10,6 +10,7 @@ import Achievements from "../pages/Achievements";
 import Resume from "../pages/Resume";
 import Contact from "../pages/Contact";
 import Safari from "../pages/Safari";
+import Music from "../pages/Music";
 import PageWindow from "../components/Window/PageWindow";
 import { createElement } from "react";
 
@@ -112,6 +113,16 @@ export const appRegistry = {
         ...props,
         title: "Safari",
         Component: Safari,
+      }),
+  },
+  music: {
+    id: "music",
+    title: "Music",
+    component: (props) =>
+      createElement(PageWindow, {
+        ...props,
+        title: "Music",
+        Component: Music,
       }),
   },
 };

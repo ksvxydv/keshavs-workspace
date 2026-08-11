@@ -1,16 +1,15 @@
 import { useContext, useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { WindowManagerContext } from "../../core/window/WindowManager";
+import { WindowManagerContext } from "../../core/window/WindowManagerContext";
 import Clock from "./Clock";
 import MenuLeft from "./MenuLeft";
 import MenuRight from "./MenuRight";
 import { AnimatePresence } from "framer-motion";
-import { IconAdjustmentsHorizontal } from "@tabler/icons-react";
 import ControlCenter from "../ControlCenter/ControlCenter";
 import useSystem from "../../core/system/useSystem";
 
 export default function MenuBar() {
-  const { activeWindowId, isActiveWindowMaximized } = useContext(WindowManagerContext);
+  const { activeWindowId, isActiveWindowMaximized, openWindow } = useContext(WindowManagerContext);
   const [showMenuBar, setShowMenuBar] = useState(true);
   const [showControlCenter, setShowControlCenter] = useState(false);
   const controlCenterRef = useRef(null);
@@ -71,19 +70,19 @@ export default function MenuBar() {
         onMouseLeave={() => isActiveWindowMaximized && setShowMenuBar(false)}
         className="fixed left-0 top-0 z-[5000] flex h-8 w-full items-center justify-between border-b px-3 backdrop-blur-3xl transition-colors duration-300 will-change-transform"
         style={{
-          background: "rgba(58,72,92,0.72)",
+          background: "var(--glass)",
           backdropFilter: "blur(28px) saturate(180%)",
           WebkitBackdropFilter: "blur(28px) saturate(180%)",
-          borderColor: "rgba(255,255,255,.08)",
+          borderColor: "var(--glass-border)",
           color: "var(--text)",
-          boxShadow: "inset 0 -1px 0 rgba(255,255,255,.04)",
+          boxShadow: "inset 0 -1px 0 var(--border-soft)",
         }}
       >
         <MenuLeft activeApp={activeWindowId ?? "finder"} />
 
         <MenuRight
           onMusic={() => {
-            // Music app will be connected later.
+            openWindow("music");
           }}
           onWifi={() => setWifi((v) => !v)}
           onBattery={() => setShowBatteryPopover((v) => !v)}

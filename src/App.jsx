@@ -1,10 +1,9 @@
-import { SystemProvider } from "./core/system/SystemContext";
+import { SystemProvider } from "./core/system/SystemProvider";
 import useSystem from "./core/system/useSystem";
 import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import Desktop from "./components/Desktop/Desktop";
 import StartupSequence from "./components/Startup/StartupSequence";
-
 
 function AppContent() {
   const { theme } = useSystem();

@@ -2,7 +2,7 @@ import finder from "../assets/icons/apps/finder.png";
 import safari from "../assets/icons/apps/safari.png";
 import terminal from "../assets/icons/apps/terminal.png";
 import settings from "../assets/icons/apps/settings.png";
-import trash from "../assets/icons/system/trash.png";
+import music from "../assets/icons/apps/music.png";
 import contacts from "../assets/icons/apps/contacts.png";
 
 export const icons = {
@@ -11,5 +11,5 @@ export const icons = {
   terminal,
   settings,
   contacts,
-  trash,
+  music,
 };

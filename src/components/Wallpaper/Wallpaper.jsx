@@ -1,4 +1,4 @@
-import { useDesktopSettings } from "../../context/DesktopSettingsContext";
+import { useDesktopSettings } from "../../context/useDesktopSettings";
 
 export default function Wallpaper() {
   const { wallpaper } = useDesktopSettings();

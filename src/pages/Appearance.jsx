@@ -1,4 +1,4 @@
-import { useDesktopSettings } from "../context/DesktopSettingsContext";
+import { useDesktopSettings } from "../context/useDesktopSettings";
 import { accentColors } from "../data/accentColors";
 
 export default function Appearance() {
@@ -35,12 +35,6 @@ export default function Appearance() {
         }}
       >
         <h2 className="text-xl font-semibold">Theme</h2>
-        <p
-          className="mt-1 text-sm"
-          style={{ color: "var(--text-secondary)" }}
-        >
-          Theme controls will be connected in the next step.
-        </p>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           {[

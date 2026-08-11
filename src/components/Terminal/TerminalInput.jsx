@@ -1,4 +1,4 @@
-import { useDesktopSettings } from "../../context/DesktopSettingsContext";
+import { useDesktopSettings } from "../../context/useDesktopSettings";
 
 export default function TerminalInput({
   value,
@@ -11,12 +11,11 @@ export default function TerminalInput({
   const { theme } = useDesktopSettings();
 
   return (
-    <div className="mt-3 flex items-center gap-2 border-t border-neutral-700 pt-3">
-      <span
-        className={`select-none ${
-          theme === "dark" ? "text-green-400" : "text-black"
-        }`}
-      >
+    <div
+      className="mt-3 flex items-center gap-2 border-t pt-3"
+      style={{ borderColor: "var(--border)" }}
+    >
+      <span className="select-none" style={{ color: "inherit" }}>
         K-OS %
       </span>
 
@@ -41,11 +40,8 @@ export default function TerminalInput({
         }}
         onMouseDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}
-        className={`flex-1 bg-transparent font-mono outline-none ${
-          theme === "dark"
-            ? "text-green-400 caret-green-400"
-            : "text-black caret-black"
-        }`}
+        className="flex-1 bg-transparent font-mono outline-none"
+        style={{ color: "inherit", caretColor: "inherit" }}
       />
     </div>
   );

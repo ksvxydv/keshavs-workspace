@@ -7,8 +7,9 @@ const MIN_HEIGHT = 450;
 
 export default function useWindowManager() {
   const [openWindows, setOpenWindows] = useState([]);
-  const [topZIndex, setTopZIndex] = useState(1);
+  const [, setTopZIndex] = useState(1);
   const [activeWindowId, setActiveWindowId] = useState(null);
+  const [isMissionControlActive, setIsMissionControlActive] = useState(false);
 
   const activeWindow = openWindows.find((w) => w.id === activeWindowId);
   const isActiveWindowMaximized = activeWindow?.maximized ?? false;
@@ -142,7 +143,6 @@ export default function useWindowManager() {
               ...w,
               minimized: true,
               minimizing: false,
-              minimizeAnimation: null,
             }
           : w,
       ),
@@ -223,17 +223,44 @@ export default function useWindowManager() {
   }
 
   function startDragging(appId, event) {
-    const window = openWindows.find((w) => w.id === appId);
-    if (!window) return;
+    const windowObj = openWindows.find((w) => w.id === appId);
+    if (!windowObj) return;
 
     document.body.style.userSelect = "none";
     document.body.style.webkitUserSelect = "none";
     event.preventDefault();
 
+    let currentX = windowObj.x;
+    let currentY = windowObj.y;
+    let currentW = windowObj.width;
+    let currentH = windowObj.height;
+
+    // Unsnap on drag if it was snapped (has previousBounds but not maximized)
+    if (windowObj.previousBounds && !windowObj.maximized) {
+      currentW = windowObj.previousBounds.width;
+      currentH = windowObj.previousBounds.height;
+      const ratio = (event.clientX - windowObj.x) / windowObj.width;
+      currentX = event.clientX - (currentW * ratio);
+      currentY = event.clientY - 15;
+      
+      setOpenWindows((current) => current.map((w) => w.id === appId ? {
+        ...w,
+        width: currentW,
+        height: currentH,
+        x: currentX,
+        y: currentY,
+        previousBounds: null
+      } : w));
+    }
+
     dragState.current = {
       id: appId,
-      offsetX: event.clientX - window.x,
-      offsetY: event.clientY - window.y,
+      offsetX: event.clientX - currentX,
+      offsetY: event.clientY - currentY,
+      startX: currentX,
+      startY: currentY,
+      startWidth: currentW,
+      startHeight: currentH,
     };
   }
 
@@ -329,7 +356,59 @@ export default function useWindowManager() {
       );
     }
 
-    function handleMouseUp() {
+    function handleMouseUp(event) {
+      if (dragState.current) {
+        const { id, startX, startY, startWidth, startHeight } = dragState.current;
+        const clientX = event.clientX;
+        const clientY = event.clientY;
+        
+        setOpenWindows((current) => {
+          return current.map(w => {
+            if (w.id !== id || w.maximized) return w;
+            
+            const threshold = 15;
+            const menuBarHeight = 28; // K-OS menu bar height
+            
+            let snapWidth = null;
+            let snapHeight = null;
+            let snapX = null;
+            let snapY = null;
+            
+            if (clientX <= threshold) {
+              // Snap Left
+              snapWidth = window.innerWidth / 2;
+              snapHeight = window.innerHeight - menuBarHeight;
+              snapX = 0;
+              snapY = menuBarHeight;
+            } else if (clientX >= window.innerWidth - threshold) {
+              // Snap Right
+              snapWidth = window.innerWidth / 2;
+              snapHeight = window.innerHeight - menuBarHeight;
+              snapX = window.innerWidth / 2;
+              snapY = menuBarHeight;
+            } else if (clientY <= menuBarHeight) {
+              // Snap Maximize
+              snapWidth = window.innerWidth;
+              snapHeight = window.innerHeight - menuBarHeight;
+              snapX = 0;
+              snapY = menuBarHeight;
+            }
+            
+            if (snapWidth !== null) {
+               return {
+                 ...w,
+                 previousBounds: w.previousBounds || { x: startX, y: startY, width: startWidth, height: startHeight },
+                 x: snapX,
+                 y: snapY,
+                 width: snapWidth,
+                 height: snapHeight
+               };
+            }
+            return w;
+          });
+        });
+      }
+
       dragState.current = null;
       resizeState.current = null;
       document.body.style.userSelect = "";
@@ -370,6 +449,17 @@ export default function useWindowManager() {
     };
   }, []);
 
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.key === "F3" || (e.ctrlKey && e.key === "ArrowUp")) {
+        e.preventDefault();
+        setIsMissionControlActive((prev) => !prev);
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return {
     openWindows,
     activeWindowId,
@@ -386,5 +476,7 @@ export default function useWindowManager() {
     startResizing,
     moveWindow,
     setDockItemBounds,
+    isMissionControlActive,
+    setIsMissionControlActive,
   };
 }

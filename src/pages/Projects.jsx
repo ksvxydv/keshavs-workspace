@@ -51,7 +51,7 @@ export default function Projects() {
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, []);
+  }, [next, previous]);
 
   useEffect(() => {
     if (paused || previewOpen) return;
@@ -223,7 +223,7 @@ export default function Projects() {
                   onClick={() => setCurrent(index)}
                   className={`overflow-hidden rounded-xl border transition-all duration-200 ${
                     current === index
-                      ? "ring-2 ring-blue-500 scale-110 shadow-lg"
+                      ? "ring-2 ring-[color:var(--accent)] scale-110 shadow-lg"
                       : "opacity-60 hover:opacity-100 hover:scale-105"
                   }`}
                   style={{ borderColor: "var(--border)" }}
@@ -267,7 +267,8 @@ export default function Projects() {
                 href="https://k-os-portfolio.vercel.app/"
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-lg bg-blue-500 px-5 py-2 text-white transition hover:bg-blue-600"
+                className="rounded-lg px-5 py-2 font-medium text-white transition hover:brightness-110"
+                style={{ background: "var(--accent)" }}
               >
                 Live Demo
               </a>

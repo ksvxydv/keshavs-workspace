@@ -141,21 +141,27 @@ export const commands = [
     name: "wallpaper",
     description: "Change wallpaper",
     execute: (args) => {
-      const wallpaper = (args[0] || "").toLowerCase();
+      const wallpaperId = (args[0] || "").toLowerCase();
 
-      if (!SUPPORTED_WALLPAPERS.includes(wallpaper)) {
+      if (!SUPPORTED_WALLPAPERS.includes(wallpaperId)) {
         return {
           output: [
-            `Unknown wallpaper: ${wallpaper}`,
+            `Unknown wallpaper: ${wallpaperId}`,
             `Available: ${SUPPORTED_WALLPAPERS.join(", ")}`,
           ],
         };
       }
 
-      getTerminalActions().setWallpaper?.(wallpaper);
+      // We need to pass the full wallpaper object to setWallpaper
+      import("../data/wallpapers").then(({ wallpapers }) => {
+        const wallpaperObj = wallpapers.find(w => w.id === wallpaperId);
+        if (wallpaperObj) {
+          getTerminalActions().setWallpaper?.(wallpaperObj);
+        }
+      });
 
       return {
-        output: [`Wallpaper changed to ${wallpaper}.`],
+        output: [`Wallpaper changed to ${wallpaperId}.`],
       };
     },
   },
@@ -165,9 +171,13 @@ export const commands = [
     execute: () => ({
       output: [
         "",
-        "            ███████████",
-        "         ███           ███",
-        "       ███               ███",
+        "        .:'",
+        "    __ :'__",
+        " .'`  `-'  ``.",
+        ":          .-'",
+        ":         :",
+        " :         `-;",
+        "  `.__.-.__.'",
         "",
         "K-OS 1.0",
         "──────────────────────────────",
@@ -183,6 +193,11 @@ export const commands = [
         "",
       ],
     }),
+  },
+  {
+    name: "fetch",
+    description: "Alias for neofetch",
+    execute: () => commands.find(c => c.name === "neofetch").execute(),
   },
   {
     name: "history",

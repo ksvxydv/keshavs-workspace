@@ -12,10 +12,10 @@ export default function ToggleButton({
       className="group flex w-full items-center gap-4 rounded-2xl border p-4 text-left transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
       style={{
         background: active
-          ? "linear-gradient(135deg, var(--accent), #4DA3FF)"
+          ? "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #fff 30%))"
           : "var(--window)",
         borderColor: active
-          ? "rgba(255,255,255,.18)"
+          ? "color-mix(in srgb, var(--accent) 40%, transparent)"
           : "var(--border)",
         backdropFilter: "blur(24px) saturate(180%)",
         WebkitBackdropFilter: "blur(24px) saturate(180%)",

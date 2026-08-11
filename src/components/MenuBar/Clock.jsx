@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useDesktopSettings } from "../../context/useDesktopSettings";
 
 export default function Clock() {
   const [now, setNow] = useState(new Date());
+  const { twentyFourHourTime } = useDesktopSettings();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -24,7 +26,7 @@ export default function Clock() {
   const time = new Intl.DateTimeFormat("en-US", {
     hour: "numeric",
     minute: "2-digit",
-    hour12: true,
+    hour12: !twentyFourHourTime,
   }).format(now);
 
   const formatted = `${weekday} ${day} ${month} ${time}`;

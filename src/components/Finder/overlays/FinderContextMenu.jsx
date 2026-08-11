@@ -28,13 +28,13 @@ export default function FinderContextMenu({
           top: `${contextMenu.y}px`,
           margin: 0,
           transform: "none",
-          background: "rgba(35,35,40,.28)",
-          border: "1px solid rgba(255,255,255,.12)",
+          background: "var(--glass)",
+          border: "1px solid var(--glass-border)",
           color: "var(--text)",
           borderRadius: "16px",
           overflow: "hidden",
           boxShadow:
-            "0 10px 40px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.10), inset 0 -1px 0 rgba(255,255,255,.04)",
+            "0 10px 40px rgba(0,0,0,.28), inset 0 1px 0 var(--glass-border), inset 0 -1px 0 rgba(0,0,0,.04)",
           backdropFilter: "blur(30px) saturate(180%)",
           WebkitBackdropFilter: "blur(30px) saturate(180%)",
           zIndex: 1000,
@@ -42,35 +42,61 @@ export default function FinderContextMenu({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <button className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors hover:bg-white/10" onClick={() => { onOpen(); onClose(); }}>
+        {/* Active items */}
+        <button
+          type="button"
+          className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors"
+          style={{ color: "var(--text)" }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = "var(--hover)")}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+          onClick={() => { onOpen(); onClose(); }}
+        >
           <span className="flex items-center gap-3"><FaFolderOpen /> Open</span>
           <span />
         </button>
-        <div
-          className="mx-2 h-px"
-          style={{ background: "rgba(255,255,255,0.08)" }}
-        />
-        <button type="button" disabled className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm opacity-40 cursor-default">
-          <span className="flex items-center gap-3"><FaPen /> Rename</span>
-          <span className="text-xs opacity-50"></span>
-        </button>
-        <button type="button" disabled className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm opacity-40 cursor-default">
-          <span className="flex items-center gap-3"><FaCopy /> Duplicate</span>
-          <span className="text-xs opacity-50"></span>
-        </button>
-        <button type="button" disabled className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm opacity-40 cursor-default">
-          <span className="flex items-center gap-3"><FaTrash /> Move to Trash</span>
-          <span className="text-xs opacity-50"></span>
-        </button>
-        <button className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors hover:bg-white/10" onClick={() => { onGetInfo(); onClose(); }}>
+
+        <div className="mx-2 h-px" style={{ background: "var(--border)" }} />
+
+        {/* Disabled items */}
+        {[
+          { icon: <FaPen />, label: "Rename" },
+          { icon: <FaCopy />, label: "Duplicate" },
+          { icon: <FaTrash />, label: "Move to Trash" },
+        ].map(({ icon, label }) => (
+          <button
+            key={label}
+            type="button"
+            disabled
+            className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm cursor-default"
+            style={{ color: "var(--text-muted)", opacity: 0.5 }}
+          >
+            <span className="flex items-center gap-3">{icon} {label}</span>
+            <span />
+          </button>
+        ))}
+
+        <button
+          type="button"
+          className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors"
+          style={{ color: "var(--text)" }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = "var(--hover)")}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+          onClick={() => { onGetInfo(); onClose(); }}
+        >
           <span className="flex items-center gap-3"><FaInfoCircle /> Get Info</span>
           <span />
         </button>
-        <div
-          className="mx-2 h-px"
-          style={{ background: "rgba(255,255,255,0.08)" }}
-        />
-        <button className="flex w-full items-center justify-center px-4 py-2.5 text-left text-sm transition-colors hover:bg-white/10" onClick={onClose}>
+
+        <div className="mx-2 h-px" style={{ background: "var(--border)" }} />
+
+        <button
+          type="button"
+          className="flex w-full items-center justify-center px-4 py-2.5 text-sm transition-colors"
+          style={{ color: "var(--text-secondary)" }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = "var(--hover)")}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+          onClick={onClose}
+        >
           Cancel
         </button>
       </motion.div>

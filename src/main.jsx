@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { ThemeProvider } from "./theme/ThemeProvider";
-import { DesktopSettingsProvider } from "./context/DesktopSettingsContext";
+import { DesktopSettingsProvider } from "./context/DesktopSettingsProvider";
 import "./styles/global.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
